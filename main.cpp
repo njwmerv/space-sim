@@ -2,6 +2,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
@@ -29,7 +33,7 @@ int main(){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // GLFW Window Creation
-    GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hello World", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hello World", 0, 0);
     if(window == nullptr){
         std::cerr << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -47,50 +51,52 @@ int main(){
     // Building + Compiling Shader Program
     // Vertex Shader
     const unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, 0);
     glCompileShader(vertexShader);
+    // check for shader compile errors
+    // int success;
+    // char infoLog[512];
+    // glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    // if(!success){
+    //     glGetShaderInfoLog(vertexShader, 512, 0, infoLog);
+    //     std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    // }
 
     // Fragment Shader
     const unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, 0);
     glCompileShader(fragmentShader);
+    // check for shader compile errors
+    // glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    // if(!success){
+    //     glGetShaderInfoLog(fragmentShader, 512, 0, infoLog);
+    //     std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    // }
 
-    // Shader Program
+    // Link Shaders - Shader Program
     const unsigned int shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
-    // 2.
-    glUseProgram(shaderProgram);
+    // check for linking errors
+    // glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    // if(!success){
+    //     glGetProgramInfoLog(shaderProgram, 512, 0, infoLog);
+    //     std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+    // }
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    // 1.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // // Drawing an Object in OpenGL (summary)
-    // // 0. copy vertices array in a buffer for OpenGL to use
-    // glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    // // 1. set vertex attributes pointers
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    // glEnableVertexAttribArray(0);
-    // // 2. use shader program when we want to render an object
-    // glUseProgram(shaderProgram);
-    // // 3. now draw the object
-    // functionToImplementThatDraws();
-
-    // Setup vertex data (and buffers) and configure vertex attributes
+    // set up vertex data (and buffer(s)) and configure vertex attributes
     constexpr float vertices[] = {
         0.5f,  0.5f, 0.0f,  // top right
         0.5f, -0.5f, 0.0f,  // bottom right
        -0.5f, -0.5f, 0.0f,  // bottom left
        -0.5f,  0.5f, 0.0f   // top left
     };
-    constexpr float indices[] = {
-        0, 1, 3,
-        1, 2, 3
+    const unsigned int indices[] = {  // note that we start from 0!
+        0, 1, 3,  // first Triangle
+        1, 2, 3   // second Triangle
     };
     // 0.
     unsigned int VBO, VAO, EBO;
@@ -121,7 +127,7 @@ int main(){
     glBindVertexArray(0);
 
     // uncomment this call to draw in wireframe polygons.
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // Main Loop
     while(!glfwWindowShouldClose(window)){
@@ -147,6 +153,7 @@ int main(){
     // Cleaning up
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
     glDeleteProgram(shaderProgram);
     glfwTerminate();
     return 0;
