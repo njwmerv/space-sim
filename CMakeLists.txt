@@ -10,6 +10,6 @@ fetchcontent_makeavailable(GLFW)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_executable(space_sim main.cpp)
+add_executable(space_sim main.cpp glad.c system.cc body.cc vector.cc)
 
 target_link_libraries(space_sim glfw)
