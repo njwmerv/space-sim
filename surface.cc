@@ -82,9 +82,9 @@ public:
 
     float perlin(const float x, const float y) const{
         float noise = 0;
-        float persistence = 1.0f;
-        float lacunarity = 2.0f;
-        const float NUM_OCTAVES = 4;
+        float persistence = 2.0f;
+        float lacunarity = 0.005f;
+        constexpr int NUM_OCTAVES = 4;
         for(int octave = 0; octave < NUM_OCTAVES; octave++){
             noise += persistence * perlinOctave(x * lacunarity, y * lacunarity);
             persistence *= 0.5;
@@ -124,15 +124,14 @@ Vector3 mapNoiseToColour(const float noise){
 
 void fillSurfaceTexture(unsigned char* noiseData, const int width, const int height, const int seed){
     const Perlin noiseGenerator{seed, width, height};
-    int i = 0;
-    for(int x = 0; x < width && i < width * height * 3; x++){
-        for(int y = 0; y < height && i < width * height * 3; y++){
+    for(int x = 0; x < width; x++){
+        for(int y = 0; y < height; y++){
+            const int index = (y * width + x) * 3;
             const float noise = noiseGenerator.perlin(x, y);
             const Vector3 colour = mapNoiseToColour(noise);
-            noiseData[i] = static_cast<unsigned char>(colour.x);
-            noiseData[i + 1] = static_cast<unsigned char>(colour.y);
-            noiseData[i + 2] = static_cast<unsigned char>(colour.z);
-            i += 3;
+            noiseData[index] = static_cast<unsigned char>(colour.x);
+            noiseData[index + 1] = static_cast<unsigned char>(colour.y);
+            noiseData[index + 2] = static_cast<unsigned char>(colour.z);
         }
     }
 }
