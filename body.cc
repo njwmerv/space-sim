@@ -5,6 +5,7 @@ Body::Body(const float mass, const float radius, const Vector3 position, const V
 
 float Body::getMass() const {return mass;}
 float Body::getRadius() const {return radius;}
+Vector3 Body::getColour() const {return colour;}
 Vector3 Body::getPosition() const {return position;}
 Vector3 Body::getVelocity() const {return velocity;}
 Vector3 Body::getAcceleration() const {return acceleration;}

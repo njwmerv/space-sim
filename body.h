@@ -8,6 +8,7 @@ public:
 
     [[nodiscard]] float getMass() const;
     [[nodiscard]] float getRadius() const;
+    [[nodiscard]] Vector3 getColour() const;
     [[nodiscard]] Vector3 getPosition() const;
     [[nodiscard]] Vector3 getVelocity() const;
     [[nodiscard]] Vector3 getAcceleration() const;
