@@ -11,7 +11,9 @@ void System::addBody(const float mass, const float radius, const Vector3 positio
     bodies.emplace_back(new Body(mass, radius, position, velocity, acceleration, colour));
 }
 
-const std::vector<Body*>& System::getBodies() const {return bodies;}
+const std::vector<Body*>& System::getBodies() const {return bodies; }
+
+unsigned int System::getNumBodies() const { return bodies.size();}
 
 void System::update(){
     for(auto body : bodies) body->update();

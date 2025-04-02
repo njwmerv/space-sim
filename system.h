@@ -15,6 +15,7 @@ public:
     void update();
 
     [[nodiscard]] const std::vector<Body*>& getBodies() const;
+    [[nodiscard]] unsigned int getNumBodies() const;
 private:
     std::vector<Body*> bodies;
 };
