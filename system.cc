@@ -6,8 +6,9 @@ System::~System(){
     for(auto body : bodies) {delete body;}
 }
 
-void System::addBody(float mass, float radius, Vector3 position, Vector3 velocity, Vector3 acceleration){
-    bodies.emplace_back(new Body(mass, radius, position, velocity, acceleration));
+void System::addBody(const float mass, const float radius, const Vector3 position, const Vector3 velocity,
+                     const Vector3 acceleration, const Vector3 colour){
+    bodies.emplace_back(new Body(mass, radius, position, velocity, acceleration, colour));
 }
 
 const std::vector<Body*>& System::getBodies() const {return bodies;}
