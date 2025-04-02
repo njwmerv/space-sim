@@ -1,7 +1,7 @@
 #include "body.h"
 
-Body::Body(float mass, float radius, Vector3 position, Vector3 velocity, Vector3 acceleration) :
-    mass{mass}, radius{radius}, position{position}, velocity{velocity}, acceleration{acceleration}{}
+Body::Body(const float mass, const float radius, const Vector3 position, const Vector3 velocity, const Vector3 acceleration, const Vector3 colour) :
+    mass{mass}, radius{radius}, position{position}, velocity{velocity}, acceleration{acceleration}, colour{colour}{}
 
 float Body::getMass() const {return mass;}
 float Body::getRadius() const {return radius;}

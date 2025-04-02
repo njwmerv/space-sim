@@ -4,13 +4,13 @@
 
 class Body{
 public:
-    Body(float mass, float radius, Vector3 position = Vector3(), Vector3 velocity = Vector3(), Vector3 acceleration = Vector3());
+    Body(float mass, float radius, Vector3 position = Vector3(), Vector3 velocity = Vector3(), Vector3 acceleration = Vector3(), Vector3 colour = Vector3());
 
-    float getMass() const;
-    float getRadius() const;
-    Vector3 getPosition() const;
-    Vector3 getVelocity() const;
-    Vector3 getAcceleration() const;
+    [[nodiscard]] float getMass() const;
+    [[nodiscard]] float getRadius() const;
+    [[nodiscard]] Vector3 getPosition() const;
+    [[nodiscard]] Vector3 getVelocity() const;
+    [[nodiscard]] Vector3 getAcceleration() const;
 
     void accelerate(const Vector3& acc);
 
@@ -18,6 +18,7 @@ public:
 private:
     float mass;
     float radius;
+    Vector3 colour;
     Vector3 position;
     Vector3 velocity;
     Vector3 acceleration;
