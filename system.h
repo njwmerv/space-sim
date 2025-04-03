@@ -10,7 +10,7 @@ public:
 
     ~System();
 
-    void addBody(float mass, float radius, Vector3 position = Vector3(), Vector3 velocity = Vector3(), Vector3 acceleration = Vector3(), Vector3 colour = Vector3());
+    void addBody(float mass, float radius, Vector3 position = Vector3(), Vector3 velocity = Vector3(), Vector3 acceleration = Vector3(), Vector3 colour = Vector3(), bool still = false);
 
     void update();
 
