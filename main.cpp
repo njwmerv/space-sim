@@ -1,6 +1,7 @@
 #include <glad/glad.h>
-#include <iostream>
 #include <GLFW/glfw3.h>
+#include <iostream>
+#include "render2d.h"
 #include "shader.h"
 #include "surface.h"
 
@@ -42,7 +43,7 @@ int main(){
     //------------------------------------------------------------------------------------------------------------------
     // Shader
 
-    Shader shader{"../shaders/vertex_shader.vert", "../shaders/fragment_shader.frag"};
+    Shader shader{"../shaders/vertex_shader_2d.vert", "../shaders/fragment_shader_2d.frag"};
     // constexpr float xOffset = 0.5f;
     // shader.setFloat("offset", xOffset);
 
@@ -70,41 +71,32 @@ int main(){
 
     //------------------------------------------------------------------------------------------------------------------
     // Vertex Data
-    constexpr float vertices[] = {
-        // positions         // colors           // texture coords
-        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-       -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-       -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left
-    };
-    constexpr unsigned int indices[] = {
-        0, 1, 3, // first Triangle
-        1, 2, 3  // second triangle
-    };
-    // 0. declaring variables
-    unsigned int VBO, VAO, EBO;
-    glGenBuffers(1, &VBO);
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &EBO);
-    // 1. bind Vertex Array Object
-    glBindVertexArray(VAO);
-    // 2. copy our vertices array in a vertex buffer for OpenGL to use
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    // 3. copy our index array in a element buffer for OpenGL to use
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    // 4. then set the vertex attributes pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindVertexArray(0);
+    System system;
+    system.addBody(
+        10,
+        25,
+        {WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 4.0f, 0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {255, 255, 255}
+    );
+    system.addBody(
+        10,
+        50,
+        {WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f, 0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {255, 127, 127}
+    );
+    system.addBody(
+        10,
+        25,
+        {WINDOW_WIDTH / 2.0f, 3 * WINDOW_HEIGHT / 4.0f, 0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {255, 0, 0}
+    );
+    const Render2D render{&system, WINDOW_WIDTH, WINDOW_HEIGHT};
 
     // uncomment this call to draw in wireframe polygons.
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -116,7 +108,7 @@ int main(){
         processInput(window);
 
         // Render
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader.use();
@@ -128,8 +120,8 @@ int main(){
         // glUniform4f(vertexColorLocation, 1.0f, greenValue, 0.0f, 1.0f);
 
         // Actually Render
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        render.update();
+        render.render();
 
         // Check and call events and swap buffers
         glfwSwapBuffers(window);
@@ -138,9 +130,6 @@ int main(){
 
     //------------------------------------------------------------------------------------------------------------------
     // Cleaning up
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
     glfwTerminate();
     return 0;
 }
