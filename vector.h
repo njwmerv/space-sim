@@ -19,6 +19,9 @@ struct Vector2{
     Vector2 operator*(float scalar) const;
     float operator*(const Vector2& other) const;
     Vector2& operator*=(float scalar);
+
+    float length() const;
+    Vector2 normal() const;
 };
 
 struct Vector3{
@@ -39,6 +42,9 @@ struct Vector3{
     Vector3& operator*=(float scalar);
 
     Vector3 cross(const Vector3& other) const;
+
+    float length() const;
+    Vector3 normal() const;
 };
 
 

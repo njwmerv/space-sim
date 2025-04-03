@@ -1,5 +1,8 @@
 #include "vector.h"
 
+#include <cmath>
+#include <math.h>
+
 // 2D Vectors
 Vector2::Vector2(float x, float y) : x{x}, y{y} {}
 
@@ -48,6 +51,15 @@ Vector2 operator*(float scalar, Vector2& vec){
 
 float Vector2::operator*(const Vector2& other) const {
     return x * other.x + y * other.y;
+}
+
+// Other Operations
+float Vector2::length() const {
+    return sqrt(x * x + y * y);
+}
+
+Vector2 Vector2::normal() const {
+    return *this * (1.0f / length());
 }
 
 // 3D Vectors
@@ -108,4 +120,13 @@ Vector3 Vector3::cross(const Vector3& other) const {
     float Y = (z * other.x) - (x * other.z);
     float Z = (x * other.y) - (y * other.x);
     return {X, Y, Z};
+}
+
+// Other Operations
+float Vector3::length() const {
+    return sqrt(x * x + y * y + z * z);
+}
+
+Vector3 Vector3::normal() const {
+    return *this * (1.0f / length());
 }
