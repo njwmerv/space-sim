@@ -41,6 +41,9 @@ struct Vector3{
     float operator*(const Vector3& other) const;
     Vector3& operator*=(float scalar);
 
+    Vector3 operator/(float scalar) const;
+    Vector3& operator/=(float scalar);
+
     Vector3 cross(const Vector3& other) const;
 
     float length() const;

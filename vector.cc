@@ -53,7 +53,7 @@ float Vector2::operator*(const Vector2& other) const {
     return x * other.x + y * other.y;
 }
 
-// Other Operations
+//// Other Operations
 float Vector2::length() const {
     return sqrt(x * x + y * y);
 }
@@ -122,7 +122,19 @@ Vector3 Vector3::cross(const Vector3& other) const {
     return {X, Y, Z};
 }
 
-// Other Operations
+//// Division
+Vector3 Vector3::operator/(const float scalar) const {
+    return {x / scalar, y / scalar, z / scalar};
+}
+
+Vector3& Vector3::operator/=(const float scalar){
+    x /= scalar;
+    y /= scalar;
+    z /= scalar;
+    return *this;
+}
+
+//// Other Operations
 float Vector3::length() const {
     return sqrt(x * x + y * y + z * z);
 }
