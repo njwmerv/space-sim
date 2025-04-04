@@ -13,8 +13,8 @@ Vector3 Body::getAcceleration() const {return acceleration;}
 
 void Body::accelerate(const Vector3& acc) {this->acceleration += acc;}
 
-void Body::update(){
+void Body::update(const float dt){
     if(still) return;
-    velocity += acceleration;
-    position += velocity;
+    velocity += acceleration * dt;
+    position += velocity * dt;
 }

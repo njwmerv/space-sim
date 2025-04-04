@@ -1,4 +1,5 @@
 #include "system.h"
+#include <cmath>
 
 System::System() : bodies{} {}
 
@@ -15,6 +16,29 @@ const std::vector<Body*>& System::getBodies() const {return bodies; }
 
 unsigned int System::getNumBodies() const { return bodies.size();}
 
-void System::update(){
-    for(auto body : bodies) body->update();
+void System::update(const float dt){
+    for(int i = 0; i < bodies.size(); i++){
+        Body* body = bodies.at(i);
+        for(int j = i + 1; j < bodies.size(); j++){
+            Body* b = bodies.at(j);
+            Vector3 gravityForce = calculateGravity(body, b);
+            body->accelerate(gravityForce * dt / body->getMass());
+            b->accelerate(-gravityForce * dt / b->getMass());
+        }
+    }
+    for(Body* body : bodies) body->update(dt);
 }
+
+Vector3 System::calculateGravity(const Body* a, const Body* b){
+    // constexpr float G = 6.674e-11f * pow(1e-3, 3);
+    constexpr float G = 1.99356e-44f;
+    const float MIN_DISTANCE = a->getRadius() + b->getRadius();
+
+    const Vector3 delta = b->getPosition() - a->getPosition();
+    const float r = std::max(delta.length(), MIN_DISTANCE);
+    const float magnitude = G * a->getMass() * b->getMass() / (r * r);
+    const Vector3 rHat = delta.normal();
+
+    return rHat * magnitude;
+}
+

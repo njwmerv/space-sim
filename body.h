@@ -16,7 +16,7 @@ public:
 
     void accelerate(const Vector3& acc);
 
-    void update();
+    void update(float dt);
 private:
     bool still;
     float mass;
