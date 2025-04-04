@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <cmath>
 #include <iostream>
 #include "render2d.h"
 #include "shader.h"
@@ -13,8 +14,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
 // Constants
-constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HEIGHT = 600;
+constexpr int WINDOW_WIDTH = 2000;
+constexpr int WINDOW_HEIGHT = 2000;
 
 int main(){
     //------------------------------------------------------------------------------------------------------------------
@@ -73,37 +74,105 @@ int main(){
     // Vertex Data
     System system;
     system.addBody(
-        10,
+        1.989e30f,
         25,
-        {WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 4.0f, 0},
+        {WINDOW_WIDTH / 2.0f,WINDOW_HEIGHT / 8.0f,0},
         {0, 0, 0},
         {0, 0, 0},
-        {255, 255, 255}
+        {255,255,0},
+        true
     );
+
     system.addBody(
-        10,
-        50,
-        {WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f, 0},
-        {0, 0, 0},
-        {0, 0, 0},
-        {255, 127, 127}
-    );
-    system.addBody(
-        10,
+        1.989e30f,
         25,
-        {WINDOW_WIDTH / 2.0f, 3 * WINDOW_HEIGHT / 4.0f, 0},
+        {WINDOW_WIDTH / 2.0f,7 * WINDOW_HEIGHT / 8.0f,0},
         {0, 0, 0},
         {0, 0, 0},
-        {255, 0, 0}
+        {255,255,0},
+        true
     );
-    const Render2D render{&system, WINDOW_WIDTH, WINDOW_HEIGHT};
+
+    system.addBody(
+        1.989e30f,
+        25,
+        {WINDOW_WIDTH / 8.0f, WINDOW_HEIGHT / 2.0f,0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {255,255,0},
+        true
+    );
+
+    system.addBody(
+        1.989e30f,
+        25,
+        {7 * WINDOW_WIDTH / 8.0f,WINDOW_HEIGHT / 2.0f,0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {255,255,0},
+        true
+    );
+
+    system.addBody(
+        1.989e30f,
+        25,
+        {8 * WINDOW_WIDTH / 16.0f,WINDOW_HEIGHT / 2.0f,0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {255,255,0}
+    );
+
+    // Sun
+    // system.addBody(
+    //     1.989e30f,
+    //     25,
+    //     {WINDOW_WIDTH / 2.0f,WINDOW_HEIGHT / 2.0f,0},
+    //     {0, 0, 0},
+    //     {0, 0, 0},
+    //     {255,255,0},
+    //     true
+    // );
+    // Mercury
+    // system.addBody(
+    //     3.301e23f,
+    //     10,
+    //     {4 * WINDOW_WIDTH / 8.0f,2.44f * WINDOW_HEIGHT / 8.0f,0},
+    //     {2.27526627016e-3, 0,0},
+    //     {0, 0, 0},
+    //     {169,169,169}
+    // );
+    // Venus
+    // system.addBody(
+    //     4.867e2f,
+    //     10,
+    //     {4 * WINDOW_WIDTH / 8.0f,6.88f * WINDOW_HEIGHT / 8.0f,0},
+    //     {-0.0042f, 0, 0},
+    //     {0, 0, 0},
+    //     {255,198,73}
+    // );
+    // Earth
+    // system.addBody(
+    //     5.97219e24f,
+    //     10,
+    //     {4 * WINDOW_WIDTH / 8.0f,0,0},
+    //     {1.9913287514e-5f, 0, 0},
+    //     {0, 0, 0},
+    //     {0, 127, 255}
+    // );
+    Render2D render{&system, WINDOW_WIDTH, WINDOW_HEIGHT};
 
     // uncomment this call to draw in wireframe polygons.
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     //------------------------------------------------------------------------------------------------------------------
     // Main Loop
+    float lastTime = glfwGetTime();
     while(!glfwWindowShouldClose(window)){
+        // Calculate Delta Time
+        const float currTime = glfwGetTime();
+        const float dt = 3.154e7f * (currTime - lastTime);
+        lastTime = currTime;
+
         // Input
         processInput(window);
 
@@ -120,7 +189,7 @@ int main(){
         // glUniform4f(vertexColorLocation, 1.0f, greenValue, 0.0f, 1.0f);
 
         // Actually Render
-        render.update();
+        render.update(dt);
         render.render();
 
         // Check and call events and swap buffers
