@@ -26,7 +26,7 @@ Render2D::~Render2D() {
     glDeleteBuffers(1, &EBO);
 }
 
-void Render2D::update() const {system->update();}
+void Render2D::update(const float dt) const {system->update(dt);}
 
 void Render2D::render() const {
     std::vector<float> vertices;
@@ -84,8 +84,6 @@ std::vector<float> Render2D::getVertices(const Body* body) const {
         const float angle = 2.0f * M_PI * i / NUM_EDGES;
         vertices.emplace_back(centerX + (radius / WIDTH * 2.0f) * std::cos(angle));
         vertices.emplace_back(centerY + (radius / HEIGHT * 2.0f) * std::sin(angle));
-        // vertices.emplace_back(2 * ((centerX + radius * std::cos(angle)) / 800) - 1);
-        // vertices.emplace_back(1 - 2 * ((centerY + radius * std::sin(angle)) / 600));
         vertices.emplace_back(0);
         vertices.emplace_back(red);
         vertices.emplace_back(green);

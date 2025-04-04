@@ -12,7 +12,7 @@ public:
 
     void render() const;
 
-    void update() const;
+    void update(float dt) const;
 
 private:
     System* system;
