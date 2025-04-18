@@ -30,8 +30,7 @@ void System::update(const float dt){
 }
 
 Vector3 System::calculateGravity(const Body* a, const Body* b){
-    // constexpr float G = 6.674e-11f * pow(1e-3, 3);
-    constexpr float G = 1.99356e-44f;
+    constexpr double G = 1.993560809749174e-32;
     const float MIN_DISTANCE = a->getRadius() + b->getRadius();
 
     const Vector3 delta = b->getPosition() - a->getPosition();

@@ -16,6 +16,8 @@ void processInput(GLFWwindow* window);
 // Constants
 constexpr int WINDOW_WIDTH = 2000;
 constexpr int WINDOW_HEIGHT = 2000;
+constexpr float PixelsToAU = 1000.0f;
+constexpr float MToAU = 1.496e8f;
 
 int main(){
     //------------------------------------------------------------------------------------------------------------------
@@ -73,65 +75,33 @@ int main(){
     //------------------------------------------------------------------------------------------------------------------
     // Vertex Data
     System system;
-    system.addBody(
-        1.989e30f,
-        25,
-        {WINDOW_WIDTH / 2.0f,WINDOW_HEIGHT / 8.0f,0},
-        {0, 0, 0},
-        {0, 0, 0},
-        {255,255,0},
-        true
-    );
-
-    system.addBody(
-        1.989e30f,
-        25,
-        {WINDOW_WIDTH / 2.0f,7 * WINDOW_HEIGHT / 8.0f,0},
-        {0, 0, 0},
-        {0, 0, 0},
-        {255,255,0},
-        true
-    );
-
-    system.addBody(
-        1.989e30f,
-        25,
-        {WINDOW_WIDTH / 8.0f, WINDOW_HEIGHT / 2.0f,0},
-        {0, 0, 0},
-        {0, 0, 0},
-        {255,255,0},
-        true
-    );
-
-    system.addBody(
-        1.989e30f,
-        25,
-        {7 * WINDOW_WIDTH / 8.0f,WINDOW_HEIGHT / 2.0f,0},
-        {0, 0, 0},
-        {0, 0, 0},
-        {255,255,0},
-        true
-    );
-
-    system.addBody(
-        1.989e30f,
-        25,
-        {8 * WINDOW_WIDTH / 16.0f,WINDOW_HEIGHT / 2.0f,0},
-        {0, 0, 0},
-        {0, 0, 0},
-        {255,255,0}
-    );
-
-    // Sun
     // system.addBody(
-    //     1.989e30f,
-    //     25,
-    //     {WINDOW_WIDTH / 2.0f,WINDOW_HEIGHT / 2.0f,0},
-    //     {0, 0, 0},
-    //     {0, 0, 0},
-    //     {255,255,0},
-    //     true
+    //     1.989e36f, // Mass (kg)
+    //     20, // Radius (m)
+    //     Vector3(3 * WINDOW_WIDTH / 4.0f, WINDOW_HEIGHT / 2.0f, 0), // Position
+    //     Vector3(0, 29.78e-1f, 0), // Velocity
+    //     Vector3(0, 0, 0), // Acceleration
+    //     Vector3(255, 255, 0) // Colour
     // );
+    //
+    // system.addBody(
+    //     1.989e36f, // Mass (kg)
+    //     20, // Radius (m)
+    //     Vector3(WINDOW_WIDTH / 4.0f, WINDOW_HEIGHT / 2.0f, 0), // Position
+    //     Vector3(0, -29.78e-1f, 0), // Velocity
+    //     Vector3(0, 0, 0), // Acceleration
+    //     Vector3(255, 0, 0) // Colour
+    // );
+    // Sun
+    system.addBody(
+        1.989e30f,
+        25,
+        {WINDOW_WIDTH / 2.0f,WINDOW_HEIGHT / 2.0f,0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {255,255,0},
+        true
+    );
     // Mercury
     // system.addBody(
     //     3.301e23f,
@@ -151,15 +121,15 @@ int main(){
     //     {255,198,73}
     // );
     // Earth
-    // system.addBody(
-    //     5.97219e24f,
-    //     10,
-    //     {4 * WINDOW_WIDTH / 8.0f,0,0},
-    //     {1.9913287514e-5f, 0, 0},
-    //     {0, 0, 0},
-    //     {0, 127, 255}
-    // );
-    Render2D render{&system, WINDOW_WIDTH, WINDOW_HEIGHT};
+    system.addBody(
+        5.97219e24f,
+        5,
+        {WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 4.0f,0},
+        {0.023475f, 0, 0},
+        {0, 0, 0},
+        {0, 127, 255}
+    );
+    const Render2D render{&system, WINDOW_WIDTH, WINDOW_HEIGHT};
 
     // uncomment this call to draw in wireframe polygons.
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -170,7 +140,7 @@ int main(){
     while(!glfwWindowShouldClose(window)){
         // Calculate Delta Time
         const float currTime = glfwGetTime();
-        const float dt = 3.154e7f * (currTime - lastTime);
+        const float dt = (currTime - lastTime);
         lastTime = currTime;
 
         // Input
@@ -189,7 +159,7 @@ int main(){
         // glUniform4f(vertexColorLocation, 1.0f, greenValue, 0.0f, 1.0f);
 
         // Actually Render
-        render.update(dt);
+        render.update(1);
         render.render();
 
         // Check and call events and swap buffers
